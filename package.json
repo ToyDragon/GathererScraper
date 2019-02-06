@@ -1,0 +1,30 @@
+{
+  "name": "gathererscraper",
+  "version": "1.0.0",
+  "description": "Alternative to MTGJson",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha Src/Tests/**/*.js",
+    "pretest": "./build.sh"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ToyDragon/GathererScraper.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ToyDragon/GathererScraper/issues"
+  },
+  "homepage": "https://github.com/ToyDragon/GathererScraper#readme",
+  "dependencies": {
+    "@types/cheerio": "^0.22.10",
+    "cheerio": "^1.0.0-rc.2"
+  },
+  "devDependencies": {
+    "@types/mocha": "^5.2.5",
+    "mocha": "^5.2.0",
+    "ts-node": "^8.0.2",
+    "typescript": "^3.3.1"
+  }
+}

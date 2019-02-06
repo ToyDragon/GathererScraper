@@ -1,0 +1,1 @@
+cd Src; sudo tsc;
