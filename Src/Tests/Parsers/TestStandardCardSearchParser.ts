@@ -6,7 +6,7 @@ import * as path from "path";
 import "mocha";
 
 import StandardCardSearchParser from "../../Gatherer/Parsers/StandardCardSearchParser";
-import { MTGCardRarity } from "../../Types/MTGCardRarity";
+import { MTGCardRarity } from "mtgtypes";
 
 
 describe("StandardCardSearchParser", () => {

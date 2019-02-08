@@ -1,7 +1,5 @@
 import ParserBase from "./ParserBase";
-import { MTGCostType } from "../../Types/MTGCostType";
-import { MTGCardRarity } from "../../Types/MTGCardRarity";
-import { MTGCardSuperType } from "../../Types/MTGCardSuperType";
+import { MTGCostType, MTGCardRarity, MTGCardSuperType } from "mtgtypes";
 
 interface CardSearchCardDetails{
     name: string;
@@ -18,7 +16,7 @@ interface CardSearchCardDetails{
     multiverseId: string;
 }
 
-interface CardSearchSetDetails{
+export interface CardSearchSetDetails{
     code: string;
     numberCards: number;
     cards: CardSearchCardDetails[];

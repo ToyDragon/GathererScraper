@@ -1,7 +1,7 @@
 import GathererSearchPageRequest from "./Gatherer/Requests/GathererSearchPageRequest";
 import GathererSetCardsRequest from "./Gatherer/Requests/GathererSetCardsRequest";
 import * as fs from "fs";
-import { MTGSetDetails } from "./Types/MTGSet";
+import { CardSearchSetDetails } from "./Gatherer/Parsers/StandardCardSearchParser";
 import ArgsParser from "./ArgsParser";
 import StandardCardSearchParser from "./Gatherer/Parsers/StandardCardSearchParser";
 
@@ -11,7 +11,7 @@ const setDetailFile = "./Files/SetDetails.json";
 let setNames: string[] = [];
 let argsParser = new ArgsParser(process.argv);
 
-function ScrapeSetDetails(): Promise<MTGSetDetails[]>{
+function ScrapeSetDetails(): Promise<CardSearchSetDetails[]>{
     return new Promise((resolve) => {
         new GathererSearchPageRequest().Execute().then((result: CheerioStatic) => {
             let allOptions = result("#ctl00_ctl00_MainContent_Content_SearchControls_setAddText > option").toArray();
@@ -21,13 +21,13 @@ function ScrapeSetDetails(): Promise<MTGSetDetails[]>{
         
             let existingSetDetails = null;
             if(!argsParser.args["f"] && !argsParser.args["full"]){
-                existingSetDetails = JSON.parse(fs.readFileSync(setDetailFile, "utf8")) as MTGSetDetails[];
+                existingSetDetails = JSON.parse(fs.readFileSync(setDetailFile, "utf8")) as CardSearchSetDetails[];
                 for(let setDeetz of existingSetDetails){
                     setsToExclude[setDeetz.name] = true;
                 }
             }
 
-            GatherSetDetails(setNames, setsToExclude, existingSetDetails).then((setDetails: MTGSetDetails[]) => {
+            GatherSetDetails(setNames, setsToExclude, existingSetDetails).then((setDetails: CardSearchSetDetails[]) => {
                 let stream = fs.createWriteStream(setDetailFile);
                 stream.write(JSON.stringify(setDetails));
                 stream.close();
@@ -97,7 +97,7 @@ function ScrapeSingleSetCardList(setName: string, expectedCardCount: number): Pr
     });
 }
 
-function ScrapeSetCardList(setDetails: MTGSetDetails[]): Promise<{[setCode: string]: string[]}>{
+function ScrapeSetCardList(setDetails: CardSearchSetDetails[]): Promise<{[setCode: string]: string[]}>{
     let allCardsBySet: {[setCode: string]: string[]};
     try{
         allCardsBySet = JSON.parse(fs.readFileSync(setCodeToCardIdMapFile, "utf8")) || {};
@@ -121,9 +121,9 @@ function ScrapeSetCardList(setDetails: MTGSetDetails[]): Promise<{[setCode: stri
     });
 }
 
-function GatherSetDetails(setNames: string[], setsToExclude: {[setName: string]: boolean}, existingSetDetails: MTGSetDetails[]): Promise<MTGSetDetails[]>{
+function GatherSetDetails(setNames: string[], setsToExclude: {[setName: string]: boolean}, existingSetDetails: CardSearchSetDetails[]): Promise<CardSearchSetDetails[]>{
     return new Promise((resolve) => {
-        let details: MTGSetDetails[] = [];
+        let details: CardSearchSetDetails[] = [];
 
         if(existingSetDetails){
             details = existingSetDetails;
@@ -149,7 +149,7 @@ function GatherSetDetails(setNames: string[], setsToExclude: {[setName: string]:
 }
 
 
-ScrapeSetDetails().then((setDetails: MTGSetDetails[]) => {
+ScrapeSetDetails().then((setDetails: CardSearchSetDetails[]) => {
     ScrapeSetCardList(setDetails).then((allCardsBySet: {[setCode: string]: string[]}) => {
         let stream = fs.createWriteStream(setCodeToCardIdMapFile);
         stream.write(JSON.stringify(allCardsBySet));
@@ -160,7 +160,7 @@ ScrapeSetDetails().then((setDetails: MTGSetDetails[]) => {
 
 
 function AsyncIter<K>(itemList: K[], func: (index: number, item:K, next: (cont: boolean) => void) => void): Promise<void>{
-    return new Promise((resolve)=>{
+    return new Promise((resolve) => {
         let currentItem = -1;
         let processNextItem = (cont: boolean) => {
             currentItem++;

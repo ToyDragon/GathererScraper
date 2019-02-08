@@ -1,4 +1,4 @@
-import { MTGLocale } from "../../Types/MTGLocale";
+import { MTGLocale } from "mtgtypes";
 import * as querystring from "querystring";
 import * as http from "http";
 import * as cheerio from "cheerio";
